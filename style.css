@@ -17,6 +17,10 @@ table th {
   background-color: whitesmoke;
 }
 
+input {
+  width: 95%;
+}
+
 .container {
   padding: 1.5em;
   background-color: white;
