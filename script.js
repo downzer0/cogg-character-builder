@@ -219,7 +219,7 @@ const getIncrementCost = (number) => {
   if (n === 700) return 8;
 };
 
-const updateSkillValues = () => {
+const updateSkillValues = (event) => {
   const inputs = Array.from(document.querySelectorAll("input.text-input"));
   let total = parseInt(0);
   inputs.forEach((input) => {
@@ -231,12 +231,24 @@ const updateSkillValues = () => {
   updateTotal(total);
 };
 
+const checkValueIsValid = (event) => {
+  const input = event.target;
+  const max = parseInt(input.getAttribute("max"), 10);
+  if (input.value === 0 || !input.value) {
+    input.value = 0;
+  }
+  if (input.value > max) {
+    input.value = max;
+  }
+  updateSkillValues(event);
+};
+
 const applyListenerToInputs = () => {
-  console.log("reapplying input listeners");
   const skillInputs = Array.from(document.querySelectorAll("[data-js]"));
-  skillInputs.forEach((input) =>
-    input.addEventListener("change", () => updateSkillValues())
-  );
+  skillInputs.forEach((input) => {
+    input.addEventListener("change", (event) => checkValueIsValid(event));
+    input.addEventListener("blur", (event) => checkValueIsValid(event));
+  });
 };
 
 const updateTotal = (newTotal) => {
@@ -285,10 +297,12 @@ const updateClassSkills = (chosenClass) => {
 
 const applyListenerToClass = () => {
   const classSelector = document.querySelector("#class");
-  classSelector.addEventListener("change", (event) => {
+  const func = (event) => {
     updateClassSkills(event.target.value);
     updateTotal(0);
-  });
+  };
+  classSelector.addEventListener("change", (event) => func(event));
+  classSelector.addEventListener("blur", (event) => func(event));
 };
 
 document.addEventListener("DOMContentLoaded", () => {
