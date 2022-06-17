@@ -49,10 +49,6 @@ input {
   color: white;
 }
 
-.total.is-unset {
-  background-color: black;
-}
-
 .total.is-good {
   background-color: rgb(0, 89, 0);
 }

@@ -618,6 +618,12 @@ const getIncrementCost = (number) => {
   if (n === 700) return 8;
 };
 
+const updateTotal = (newTotal) => {
+  const totalCount = document.querySelector("#available");
+  const internationalNumberFormat = new Intl.NumberFormat("en-US");
+  totalCount.innerText = internationalNumberFormat.format(10000 - newTotal);
+};
+
 const updateSkillValues = (event) => {
   const inputs = Array.from(document.querySelectorAll("input.text-input"));
   let total = parseInt(0);
@@ -648,12 +654,6 @@ const applyListenerToInputs = () => {
     input.addEventListener("change", (event) => checkValueIsValid(event));
     input.addEventListener("blur", (event) => checkValueIsValid(event));
   });
-};
-
-const updateTotal = (newTotal) => {
-  const total = document.querySelector("#available");
-  const internationalNumberFormat = new Intl.NumberFormat("en-US");
-  total.innerText = internationalNumberFormat.format(10000 - newTotal);
 };
 
 const createSkillRow = (skill, allSkillClasses, chosenClass, index) => {
@@ -704,7 +704,31 @@ const applyListenerToClass = () => {
   classSelector.addEventListener("blur", (event) => func(event));
 };
 
+const handleTotalOverage = (mutationsList) => {
+  const totalEl = document.querySelector("#total-points");
+  const totalValue = parseInt(
+    totalEl.querySelector("#available").innerText.replace(",", ""),
+    10
+  );
+  if (totalValue <= 0) {
+    return totalEl.classList.add("is-bad");
+  }
+  return totalEl.classList.remove("is-bad");
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   applyListenerToInputs();
   applyListenerToClass();
+
+  const totalMutationObserver = new MutationObserver(handleTotalOverage);
+  const totalMutationObserverConfigs = {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  };
+
+  totalMutationObserver.observe(
+    document.querySelector("#available"),
+    totalMutationObserverConfigs
+  );
 });
