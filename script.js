@@ -624,7 +624,7 @@ const updateSkillValues = (event) => {
   inputs.forEach((input) => {
     const value = parseInt(input.value, 10);
     const cost = getIncrementCost(input.value);
-    const costValue = value * cost;
+    const costValue = (value * cost) / 2;
     total = total + costValue;
   });
   updateTotal(total);
